@@ -1,36 +1,171 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚚 Smart Delivery Management System
 
-## Getting Started
+A modern, intelligent delivery management dashboard built with **Next.js**, **TypeScript**, and **MongoDB**, focused on streamlining delivery partner coordination, smart order assignments, and real-time tracking.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📌 Features
+
+### ✅ Partner Management
+- Register and manage delivery partners
+- Edit partner profiles, areas, and shifts
+- View partner availability and current load
+
+### ✅ Order Processing
+- Track and manage order statuses
+- View order details, assignments, and scheduling
+- Monitor delivery performance
+
+### ✅ Smart Assignment System
+- Automatically assign orders based on partner availability, area, and load
+- Track assignment success/failure with reasoning
+- View metrics for assignment efficiency
+
+---
+
+## 📁 Pages
+
+| Page | Description |
+|------|-------------|
+| `/` | Dashboard with key metrics, active orders map, and assignment summary |
+| `/partners` | List of partners, filter by availability, manage areas and shifts |
+| `/orders` | Order list with filters (status, area, date), status tracking |
+| `/assignments` | View active assignments, success/failure reasons, and metrics |
+
+---
+
+## 🧩 Data Models (TypeScript)
+
+### `DeliveryPartner`
+```ts
+type DeliveryPartner = {
+  name: string;
+  email: string;
+  phone: string;
+  status: 'active' | 'inactive';
+  currentLoad: number;
+  areas: string[];
+  shift: { start: string; end: string };
+  metrics: {
+    rating: number;
+    completedOrders: number;
+    cancelledOrders: number;
+  };
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### `Order`
+```ts
+type Order = {
+  orderNumber: string;
+  customer: { name: string; phone: string; address: string };
+  area: string;
+  items: { name: string; quantity: number; price: number }[];
+  status: 'pending' | 'assigned' | 'picked' | 'delivered';
+  scheduledFor: string;
+  assignedTo?: string;
+  totalAmount: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### `Assignment`
+```ts
+type Assignment = {
+  orderId: string;
+  partnerId: string;
+  timestamp: Date;
+  status: 'success' | 'failed';
+  reason?: string;
+}
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📡 API Routes
 
-To learn more about Next.js, take a look at the following resources:
+### Partners
+- `GET /api/partners`
+- `POST /api/partners`
+- `PUT /api/partners/[id]`
+- `DELETE /api/partners/[id]`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Orders
+- `GET /api/orders`
+- `POST /api/orders/assign`
+- `PUT /api/orders/[id]/status`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Assignments
+- `GET /api/assignments/metrics`
+- `POST /api/assignments/run`
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚀 Getting Started
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Prerequisites
+- Node.js
+- MongoDB (local or Atlas)
+
+### Setup
+
+```bash
+# Clone the repo
+git clone https://github.com/your-username/smart-delivery-management.git
+cd smart-delivery-management
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+### Environment Variables
+
+Create a `.env.local` file with:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/YourFeature`)
+3. Commit your changes (`git commit -am 'Add feature'`)
+4. Push to the branch (`git push origin feature/YourFeature`)
+5. Open a Pull Request
+
+Check out [`CONTRIBUTING.md`](CONTRIBUTING.md) for more details.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** – see the [`LICENSE`](LICENSE) file for details.
+
+---
+
+## 👀 Live Demo
+
+_(Optional) Add your deployed URL here if available:_
+
+[https://your-project-demo-url.com](https://your-project-demo-url.com)
+
+---
+
+## 💡 Evaluation Criteria (for developers and reviewers)
+
+- ✅ TypeScript and type safety
+- ✅ Component structure and modularity
+- ✅ State and error handling
+- ✅ Responsiveness and UX
+- ✅ Efficient assignment logic
+
+---
